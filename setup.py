@@ -32,6 +32,7 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: Security :: Cryptography'
     ],
 
     install_requires = ['asn1crypto'],
