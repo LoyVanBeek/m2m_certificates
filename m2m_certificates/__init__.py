@@ -832,6 +832,7 @@ def verify_signature(signed_bytes, signature, public_key_path=None, public_key_b
     """openssl dgst -sha256 -verify public.pem -signature signature.der message.txt
     :param public_key_bytes:
     """
+    # TODO: the encryption method is now hardcoded to Elliptic Curve Crypto, should be configurable
     # TODO: Replace this with eg. pyopenssl, something where we do not need to use files in between as it is a security hole
     byte_path = "/tmp/signed.tmp"
     with open(byte_path, 'wb') as byte_file:
