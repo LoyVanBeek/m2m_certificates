@@ -1,3 +1,6 @@
+.. image:: https://travis-ci.org/LoyVanBeek/m2m_certificates.svg?branch=master
+    :target: https://travis-ci.org/LoyVanBeek/m2m_certificates
+
 Python module for generating and parsing M2M format certificates
 ================================================================
 
