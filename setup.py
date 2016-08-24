@@ -17,7 +17,7 @@ reqs = [str(ir.req) for ir in install_reqs]
 
 setup(
     name = 'm2m_certificates',
-    version = 0.1,
+    version = 0.1.1,
     packages = find_packages(),
     license = 'AGPL',
     url = 'https://github.com/LoyVanBeek/m2m_certificates',
