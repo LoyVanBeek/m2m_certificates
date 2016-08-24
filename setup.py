@@ -4,12 +4,16 @@
 from setuptools import setup, find_packages
 from codecs import open
 from os import path
+from pip.req import parse_requirements
 
 here = path.abspath(path.dirname(__file__))
 
 # Get the long description from the README file
 with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
+
+install_reqs = parse_requirements("requirements.txt", session=False)
+reqs = [str(ir.req) for ir in install_reqs]
 
 setup(
     name = 'm2m_certificates',
@@ -35,5 +39,5 @@ setup(
         'Topic :: Security :: Cryptography'
     ],
 
-    install_requires = ['asn1crypto'],
+    install_requires = reqs,
 )
