@@ -21,14 +21,12 @@ setup(
     packages = find_packages(),
     license = 'AGPL',
     url = 'https://github.com/LoyVanBeek/m2m_certificates',
-
+    download_url = 'https://github.com/LoyVanBeek/m2m_certificates/tarball/0.1',
     description = 'Python module for generating and parsing M2M format certificates',
     long_description = long_description,
     keywords = 'nfc ndef m2m',
-
     author = 'Loy van Beek',
     author_email = 'l.vanbeek@ultimaker.com',
-
     classifiers = [
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: GNU Affero General Public License v3',
