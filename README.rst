@@ -1,6 +1,7 @@
 .. image:: https://travis-ci.org/LoyVanBeek/m2m_certificates.svg?branch=master
     :target: https://travis-ci.org/LoyVanBeek/m2m_certificates
-
+.. image:: https://codecov.io/gh/LoyVanBeek/m2m_certificates/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/LoyVanBeek/m2m_certificates
 Python module for generating and parsing M2M format certificates
 ================================================================
 
