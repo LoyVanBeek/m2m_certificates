@@ -243,7 +243,7 @@ class TestTrustpointP256Example(unittest.TestCase):
         builder.issuer = issuer
 
         builder.version = 0
-        builder.serial_number = 16062  # bytes([0, 1, 6, 0, 6, 2])
+        builder.serial_number = b'\x01\x60\x62'
         builder.ca_algorithm = "1.3.186.1.9"  # (ecdsa-with-sha256-secp256r1), see http://oid-info.com/get/1.3.186.1.9
 
         builder.valid_from = bytes("54078ebd", encoding="ascii")

@@ -452,7 +452,18 @@ class CertificateBuilder(object):
         this certificate when combined with the issuer name.
         """
 
-        if not isinstance(value, int_types):
+        if isinstance(value, int_types):
+            as_bytes = int_to_bytes(value)
+        elif isinstance(value, bytes):
+            if int_from_bytes(value) < 0:
+                raise ValueError(_pretty_message(
+                    '''
+                    serial_number must be a non-negative integer, not %s
+                    ''',
+                    repr(value)
+                ))
+            as_bytes = value
+        else:
             raise TypeError(_pretty_message(
                 '''
                 serial_number must be an integer, not %s
@@ -460,16 +471,10 @@ class CertificateBuilder(object):
                 _type_name(value)
             ))
 
-        if value < 0:
-            raise ValueError(_pretty_message(
-                '''
-                serial_number must be a non-negative integer, not %s
-                ''',
-                repr(value)
-            ))
 
-        if len(int_to_bytes(value)) > 20:
-            required_bits = len(int_to_bytes(value)) * 8
+
+        if len(as_bytes) > 20:
+            required_bits = len(as_bytes) * 8
             raise ValueError(_pretty_message(
                 '''
                 serial_number must be an integer that can be represented by a
@@ -642,12 +647,12 @@ class CertificateBuilder(object):
         if self.serial_number is None:
             time_part = int_to_bytes(int(time.time()))
             random_part = random.getrandbits(24).to_bytes(3, byteorder='big')  # Must contain at least 20 randomly generated BITS
-            self.serial_number = int_from_bytes(time_part + random_part)
+            self.serial_number = time_part + random_part
 
         # Only re non-optionals are always in this dict
         properties = {
             # 'version':Integer(value=self._version), Excluding version because it is also excluded from the example given by Trustpoint
-            'serialNumber':OctetString(value=self.serial_number.to_bytes(20, byteorder='big')),
+            'serialNumber':OctetString(value=self.serial_number),
             'subject':self.subject,
         }
 
