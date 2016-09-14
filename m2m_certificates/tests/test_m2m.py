@@ -1,5 +1,6 @@
 import unittest
 from .. import *
+from os import path
 
 import base64
 
@@ -219,3 +220,44 @@ class TestCryptography(unittest.TestCase):
         verifier = CertificateVerifier(self.public)
 
         self.assertFalse(verifier.verify(decoded_cert))
+
+        self.assertFalse(verifier.verify(decoded_cert))
+
+
+class TestTrustpointP256Example(unittest.TestCase):
+    def setUp(self):
+        self.subject_private = path.expanduser('~/Downloads/P256/NFC_TRIAL_ECDSA_SIGNER256_PRIVATE_KEY.pem')
+        self.subject_public = path.expanduser('~/Downloads/P256/NFC_TRIAL_ECDSA_SIGNER256_PUBLIC_KEY.pem')
+
+        self.issuer_private = path.expanduser('~/Downloads/P256/NFC_TRIAL_ECDSA_ROOT256_256_PRIVATE_KEY.pem')
+        self.issuer_public = path.expanduser('~/Downloads/P256/NFC_TRIAL_ECDSA_ROOT256_256_PUBLIC_KEY.pem')
+
+        subject = Name()
+        subject[0] = AttributeValue(name='commonName', value=UTF8String(value='ECDSA_P256_Signer'))
+
+        issuer = Name()
+        issuer[0] = AttributeValue(name='commonName', value=UTF8String(value='NFCRootExample'))
+
+        pubkey = contentbytes_from_pem_file(self.subject_public)
+        builder = CertificateBuilder(subject, pubkey)
+        builder.issuer = issuer
+
+        builder.version = 0
+        builder.serial_number = 16062  # bytes([0, 1, 6, 0, 6, 2])
+        builder.ca_algorithm = "1.3.186.1.9"  # (ecdsa-with-sha256-secp256r1), see http://oid-info.com/get/1.3.186.1.9
+
+        builder.valid_from = bytes("54078ebd", encoding="ascii")
+        builder.valid_duration = bytes("09942600", encoding="ascii")
+
+        builder.pk_algorithm = "1.3.186.1.9"  #  (ecdsa-with-sha256-secp256r1)
+        # public_key is already set via CertificateBuilder.__init__
+        # builder.public_key = bytes("03260d22330fe019918b3a7f4f818dca37c19b1b51b8020e723aee955460bc3425", encoding="ascii")
+
+        self.orig_cert = builder.build(signing_private_key_path=self.issuer_private)
+
+    def test_encoding_decoding(self):
+        encoded_cert = self.orig_cert.dump()
+        print(base64.b64encode(encoded_cert))
+        decoded_cert = Certificate.load(encoded_cert)
+
+        self.assertEqual(self.orig_cert.dump(), decoded_cert.dump())
