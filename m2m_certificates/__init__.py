@@ -502,15 +502,17 @@ class CertificateBuilder(object):
         A datetime.datetime object of when the certificate becomes valid.
         """
 
-        if not isinstance(value, datetime):
+        if isinstance(value, datetime):
+            self._valid_from = (value - datetime.utcfromtimestamp(0)).total_seconds().to_bytes(5, byteorder='big')
+        elif isinstance(value, bytes):
+            self._valid_from = value
+        else:
             raise TypeError(_pretty_message(
                 '''
-                valid_from must be an instance of datetime.datetime, not %s
+                valid_from must be an instance of datetime.datetime or bytes, not %s
                 ''',
                 _type_name(value)
             ))
-
-        self._valid_from = (value - datetime.utcfromtimestamp(0)).total_seconds().to_bytes(5, byteorder='big')
 
     @_writer
     def valid_duration(self, value):
@@ -519,15 +521,17 @@ class CertificateBuilder(object):
         considered valid.
         """
 
-        if not isinstance(value, timedelta):
+        if isinstance(value, timedelta):
+            self._valid_duration = value.total_seconds().to_bytes(5, byteorder='big')
+        elif isinstance(value, bytes):
+            self._valid_duration = value
+        else:
             raise TypeError(_pretty_message(
                 '''
-                valid_duration must be an instance of datetime.timedelta, not %s
+                valid_duration must be an instance of datetime.timedelta or bytes, not %s
                 ''',
                 _type_name(value)
             ))
-
-        self._valid_duration = value.total_seconds().to_bytes(5, byteorder='big')
 
     @_writer
     def subject(self, value):
