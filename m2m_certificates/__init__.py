@@ -646,7 +646,7 @@ class CertificateBuilder(object):
 
         # Only re non-optionals are always in this dict
         properties = {
-            'version':Integer(value=self._version),
+            # 'version':Integer(value=self._version), Excluding version because it is also excluded from the example given by Trustpoint
             'serialNumber':OctetString(value=self.serial_number.to_bytes(20, byteorder='big')),
             'subject':self.subject,
         }
