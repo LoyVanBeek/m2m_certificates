@@ -253,10 +253,29 @@ class TestTrustpointP256Example(unittest.TestCase):
         # public_key is already set via CertificateBuilder.__init__
         # builder.public_key = bytes("03260d22330fe019918b3a7f4f818dca37c19b1b51b8020e723aee955460bc3425", encoding="ascii")
 
-        self.orig_cert = builder.build(signing_private_key_path=self.issuer_private)
+        self.orig_cert = builder.build(signing_private_key_path=self.issuer_private, debug=True)
+
+        r = 0x00c4c5ed9f9326d9ce4a602cabf72c86ba0dae9d8c53e6074d8cac313d72e01edb #0x022100c4c5ed9f9326d9ce4a602cabf72c86ba0dae9d8c53e6074d8cac313d72e01edb
+        s = 0x5735aa5efc3e4d71d5e913d34207e79b743689bc37492eed3e32843ebc32fa96 #0x02205735aa5efc3e4d71d5e913d34207e79b743689bc37492eed3e32843ebc32fa96
+        rb = int_to_bytes(r)
+        sb = int_to_bytes(s)
+        ri = Integer(value=r)
+        si = Integer(value=s)
+        # caacvalue_seq = ECDSA_Sig_Value({'r':ri, 's':si})
+        # signature = caacvalue_seq.dump()
+
+        # signature = OctetString(value=int_to_bytes(r)+int_to_bytes(s))
+        signature = OctetString(rb + sb)
+
+        print("Build  - R ({len}): {content}".format(len=len(rb), content=hexlify(rb)))
+        print("Build  - S ({len}): {content}".format(len=len(sb), content=hexlify(sb)))
+
+        self.orig_cert['cACalcValue'] = signature
 
     def test_encoding_decoding(self):
         encoded_cert = self.orig_cert.dump()
+
+        print()
         print(base64.b64encode(encoded_cert))
         decoded_cert = Certificate.load(encoded_cert)
 
