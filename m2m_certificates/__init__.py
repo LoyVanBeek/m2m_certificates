@@ -172,7 +172,7 @@ class AuthkeyID(Sequence):
     }
     """
     _fields = [
-        ('keyIdentified', OctetString, {'optional':True, 'tag':0, 'tag_type':'implicit'}),
+        ('keyIdentifier', OctetString, {'optional':True, 'tag':0, 'tag_type':'implicit'}),
         # A type of Choice (GeneralName) must always be explicitly tagged (says asn1crypto)
         ('authCertIssuer', GeneralName, {'optional':True, 'tag':1, 'tag_type':'explicit'}),
         ('authCertSerialNum', OctetString, {'optional':True, 'tag':2, 'tag_type':'implicit'}),
